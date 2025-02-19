@@ -27,7 +27,7 @@ $ az deployment sub create --name policytest --location japaneast --template-fil
 $ az policy definition delete --name 'DenyFandGSeriesVMs' --subscription <SUBSCRIPTION_ID>
 ```
 
-## デモ 6-2: 
+## デモ 6-2: リソース グループの作成
 
 次にリソース グループを作って、その中にリソースを展開します。
 ここでは、後続で作成している仮想ネットワークのリソース内にて、
