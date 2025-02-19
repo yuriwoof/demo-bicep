@@ -1,6 +1,6 @@
 # デモ 5
 
-## このデモのゴール
+## このデモの目的
 
 * テンプレート スペックの作成と公開
 * テンプレート スペックから Bicep ファイルのデプロイ
@@ -13,7 +13,7 @@ $ az group create --name <RESOURCE_GROUP_NAME> --location japaneast
 $ az ts create --resource-group <RESOURCE_GROUP_NAME> --name cosmosdb --location japaneast --display-name "Create Cosmos DB Account" --description "This template spec creates a Cosmos DB account that meets our company's requirements." --version 1.0 --template-file main.bicep 
 ```
 
-![alt text](image.png)
+![alt text](./imgs/image.png)
 
 作成したテンプレート スペックよりデプロイしてみます。
 

@@ -1,9 +1,11 @@
 # デモ 3
 
-## このデモのゴール
+## このデモの目的
 
-* Azure Container Registry を構築
-* モジュールを Azure Container Registry にプッシュ
+以下の内容について理解を深めます。
+
+* ローカル モジュールの利用
+* Azure Container Registry にて Bicep モジュールを管理
 * Azure Container Registry にあるリモート モジュールを使用してリソースをデプロイ
 * AVM にあるリモート モジュールを使用してリソースをデプロイ
 
@@ -122,4 +124,31 @@ $ az deployment group create --resource-group <RESOURCE_GROUP_NAME> --template-f
 $ az group delete --name <RESOURCE_GROUP_NAME> --no-wait
 ```
 
-以上でデモ1は終了です。
+## デモ3-3: AVM
+
+[Azure Verified Modules (AVM)](https://azure.github.io/Azure-Verified-Modules/indexes/bicep/) は、Azure によって検証されたベスト プラクティスを含む、
+再利用可能なモジュールのセットです。こちらにあるモジュールを使ってデプロイして見ましょう。
+
+対象モジュールで指定可能なバージョンなどの情報は、拡張機能によって取得されますが、
+AVM のポータル上でも確認いただくことが可能です。
+
+![alt text](./imgs/image-1.png)
+![alt text](./imgs/image.png)
+
+```bicep
+module storage 'br/public:avm/res/storage/storage-account:0.18.0' = {
+  name: 'myStorageAccount'
+  params: {
+    name: 'sa${resourceGroup().name}'
+  }
+}
+```
+
+デプロイ結果を確認し、リソースが作成されていることを確認します。
+確認ができましたら、リソース グループを削除します (オプション)。
+
+```bash
+$ az group delete --name <RESOURCE_GROUP_NAME> --no-wait
+```
+
+以上でデモ3は終了です。

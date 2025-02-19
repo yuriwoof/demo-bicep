@@ -7,6 +7,8 @@ Azure Bicep の条件と反復ループの構文について紹介します。
 ## デモ2-1: 条件分岐
 
 Azure Bicep では、`if` キーワードを使って条件分岐を行うことができます。
+下記の例では、```environmentName == 'Production'``` が評価され、その結果 (Bool 値) が ```auditingEnabled``` に代入されます。
+その ```auditingEnabled``` の値によって、Azure SQL Database の監査設定を有効化するかどうかを決定します。
 
 ```bicep
 @description('The name of the environment. This must be Development or Production.')
@@ -27,7 +29,7 @@ resource auditStorageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = if
 }
 ```
 
-また、`?` 演算子を使って、以下のようにも記述できます。
+条件分岐は、`?` 演算子を使って、以下のようにも記述できます。
 
 ```bicep
 resource sqlServerAudit 'Microsoft.Sql/servers/auditingSettings@2024-05-01-preview' = if (auditingEnabled) {
@@ -42,7 +44,7 @@ resource sqlServerAudit 'Microsoft.Sql/servers/auditingSettings@2024-05-01-previ
 ```
 
 それでは、実際に２通りでデプロイして、動作を確認します。
-初めに、```param environmentName string = 'Production'``` で指定された値を使用してデプロイします。
+初めに、```param environmentName string = 'Production'``` で指定された値を使用してデプロイします。この場合、```auditingEnabled``` は ```true``` となり、Azure SQL Database の監査設定が有効化されます。
 
 ```bash
 $ az deployment group create --resource-group <RESOURCE_GROUP_NAME> --template-file if.bicep
@@ -50,8 +52,8 @@ $ az deployment group create --resource-group <RESOURCE_GROUP_NAME> --template-f
 
 Azure SQL Database に監査設定が追加されていることを確認します。
 
-![alt text](image.png)
-![alt text](image-1.png)
+![alt text](./imgs/image.png)
+![alt text](./imgs/image-1.png)
 
 確認が済んだら対象リソース グループを削除します (オプション)。
 
@@ -59,7 +61,11 @@ Azure SQL Database に監査設定が追加されていることを確認しま�
 $ az group delete --name <RESOURCE_GROUP_NAME> --no-wait --yes
 ```
 
+---
+
 次に対象パラメータを ```Development``` に変更してデプロイします。
+この場合、```auditingEnabled``` は ```false``` となり、Azure SQL Database の監査設定は有効化されません。
+
 
 ```bash
 $ az deployment group create --resource-group <RESOURCE_GROUP_NAME> --template-file if.bicep --parameters environmentName=Development
@@ -67,7 +73,7 @@ $ az deployment group create --resource-group <RESOURCE_GROUP_NAME> --template-f
 
 Azure SQL Database に監査設定が追加されていないことを確認します。
 
-![alt text](image-2.png)
+![alt text](./imgs/image-2.png)
 
 確認がとれましたら、リソース グループを削除します (オプション)。
 
@@ -126,8 +132,8 @@ output serverInfo array = [for i in range(0, length(locations)): {
 
 デプロイ後の出力結果の確認は、Azure ポータルの他に、Azure CLI でも可能です。
 
-![alt text](image-3.png)
-![alt text](image-4.png)
+![alt text](./imgs/image-3.png)
+![alt text](./imgs/image-4.png)
 
 ```bash
 $ az deployment group show -g <RESOURCE_GROUP_NAME> -n loop2 --query properties.outputs.serverInfo
@@ -148,4 +154,4 @@ $ az deployment group show -g <RESOURCE_GROUP_NAME> -n loop2 --query properties.
 }
 ```
 
-以上でデモ1は終了です。
+以上でデモ2は終了です。

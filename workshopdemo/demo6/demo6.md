@@ -19,7 +19,7 @@
 $ az deployment sub create --name policytest --location japaneast --template-file subscription.bicep
 ```
 
-![alt text](image.png)
+![alt text](./imgs/image.png)
 
 確認が取れましたら、対象の Azure Policy とその割り当てを削除します。
 
@@ -37,7 +37,7 @@ $ az policy definition delete --name 'DenyFandGSeriesVMs' --subscription <SUBSCR
 $ az deployment sub create --name rgtest --location japaneast --template-file resourcegroup.bicep
 ```
 
-![alt text](image-1.png)
+![alt text](./imgs/image-1.png)
 
 確認ができましたら、リソース グループを削除します (オプション)。
 

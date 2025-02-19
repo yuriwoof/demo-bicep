@@ -28,6 +28,8 @@ resource str 'Microsoft.Storage/storageAccounts@2023-05-01' = {
 }
 ```
 
+それでは、この Bicep ファイルをデプロイします。
+
 ```bash
 $ az group create --name <RESOURCE_GROUP_NAME> --location japaneast
 $ az deployment group create --resource-group <RESOURCE_GROUP_NAME> --template-file main.bicep
@@ -69,6 +71,7 @@ $ az group delete --name <RESOURCE_GROUP_NAME> --no-wait --yes
 ```bash
 $ az group create --name <RESOURCE_GROUP_NAME> --location japaneast
 $ az keyvault create --name <your-unique-keyvault-name> --resource-group <RESOURCE_GROUP_NAME> --location japaneast --enabled-for-template-deployment true
+```
 
 なお、シークレットの作成操作には、予め Key Vault Secrets Officer のロールが割り当てられている必要があります。
 
