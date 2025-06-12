@@ -61,9 +61,7 @@ $ az group delete --name <RESOURCE_GROUP_NAME> --no-wait
 リモート モジュールの利用としては、公開されているモジュール (AVM: Azure Verified Modules) リポジトリ、
 もしくは、Azure Container Registry (ACR) にプッシュされたモジュールを利用することができます。
 
-```bicep
-
-Aure Container Registry (ACR) を作成し、モジュールファイル (```website.bicep``` と ```cdn.bicep```) をプッシュします。
+Azure Container Registry (ACR) を作成し、モジュールファイル (```website.bicep``` と ```cdn.bicep```) をプッシュします。
 まずは、ACR をデプロイします。
 
 ```bash
