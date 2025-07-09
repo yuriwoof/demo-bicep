@@ -16,7 +16,7 @@
 展開するに当たっては、```az deployment sub create``` コマンドを使用します。
 
 ```bash
-$ az deployment sub create --name policytest --location japaneast --template-file subscription.bicep
+$ az deployment sub create --name policytest --location japaneast --template-file policy.bicep
 ```
 
 ![alt text](./imgs/image.png)
