@@ -17,11 +17,11 @@
 │  main.bicep
 │  
 └─modules
-        cdn.bicep
+        appgw.bicep
         website.bicep
 ```
 
-この場合、```main.bicep``` から ```website.bicep``` と ```cdn.bicep``` を呼び出せます。
+この場合、```main.bicep``` から ```website.bicep``` と ```appgw.bicep``` を呼び出せます。
 
 ```bicep
 module website './modules/website.bicep' = {
@@ -30,15 +30,14 @@ module website './modules/website.bicep' = {
     appServiceAppName: appServiceAppName
     appServicePlanName: appServicePlanName
     appServicePlanSkuName: appServicePlanSkuName
-    location: location
   }
 }
 
-module cdn './modules/cdn.bicep' = {
-  name: 'otameshi-cdn'
+module appgw './modules/appgw.bicep' = {
+  name: 'otameshi-appgw'
   params: {
-    httpsOnly: true
-    originHostName: website.outputs.appServiceAppHostName
+    applicationGatewayName: applicationGatewayName
+    appServiceFqdn: website.outputs.appServiceAppHostName
   }
 }
 ```
@@ -61,7 +60,7 @@ $ az group delete --name <RESOURCE_GROUP_NAME> --no-wait
 リモート モジュールの利用としては、公開されているモジュール (AVM: Azure Verified Modules) リポジトリ、
 もしくは、Azure Container Registry (ACR) にプッシュされたモジュールを利用することができます。
 
-Azure Container Registry (ACR) を作成し、モジュールファイル (```website.bicep``` と ```cdn.bicep```) をプッシュします。
+Azure Container Registry (ACR) を作成し、モジュールファイル (```website.bicep``` と ```appgw.bicep```) をプッシュします。
 まずは、ACR をデプロイします。
 
 ```bash
@@ -75,13 +74,13 @@ $ az acr repository list --name <registry-name>
 
 ```bash
 $ az bicep publish --file .\modules\website.bicep --target 'br:<registry-name>.azurecr.io/website:v1'
-$ az bicep publish --file .\modules\cdn.bicep --target 'br:<registry-name>.azurecr.io/cdn:v1'
+$ az bicep publish --file .\modules\appgw.bicep --target 'br:<registry-name>.azurecr.io/appgw:v1'
 $ az acr repository list --name <registry-name>           
 [
-  "cdn",
+  "appgw",
   "website"
 ]
-$ az acr repository show-tags -n <registry-name> --repository cdn --output tsv
+$ az acr repository show-tags -n <registry-name> --repository appgw --output tsv
 v1
 $ az acr repository show-tags -n <registry-name> --repository website --output tsv
 v1
@@ -102,11 +101,11 @@ module website 'br:<registry-name>.azurecr.io/website:v1' = {
   }
 }
 
-module cdn 'br:<registry-name>.azurecr.io/cdn:v1' = {
-  name: 'otameshi-cdn'
+module appgw 'br:<registry-name>.azurecr.io/appgw:v1' = {
+  name: 'otameshi-appgw'
   params: {
-    httpsOnly: true
-    originHostName: website.outputs.appServiceAppHostName
+    applicationGatewayName: applicationGatewayName
+    appServiceFqdn: website.outputs.appServiceAppHostName
   }
 }
 ```

@@ -8,6 +8,7 @@ param appServiceAppName string = 'toy-${uniqueString(resourceGroup().id)}'
 param appServicePlanSkuName string = 'F1'
 
 var appServicePlanName = 'otameshi-plan'
+var applicationGatewayName = 'otameshi-appgw'
 
 module website 'br:<registry-name>.azurecr.io/website:v1' = {
   name: 'otameshi-website'
@@ -19,10 +20,10 @@ module website 'br:<registry-name>.azurecr.io/website:v1' = {
   }
 }
 
-module cdn 'br:<registry-name>.azurecr.io/cdn:v1' = {
-  name: 'otameshi-cdn'
+module appgw 'br:<registry-name>.azurecr.io/appgw:v1' = {
+  name: 'otameshi-appgw'
   params: {
-    httpsOnly: true
-    originHostName: website.outputs.appServiceAppHostName
+    applicaotnGatewayName: applicationGatewayName
+    appServiceFqdn: website.outputs.appServiceAppHostName
   }
 }

@@ -2,7 +2,7 @@ param location string = resourceGroup().location
 param storageAccountName string = 'sa${uniqueString(resourceGroup().id)}'
 param storageAccountType string = 'Premium_LRS'
 
-resource str 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+resource str 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: storageAccountName
   location: location
   sku: {
@@ -13,3 +13,5 @@ resource str 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     accessTier: 'Hot'
   }
 }
+
+output storageAccountId string = str.id

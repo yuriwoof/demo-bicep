@@ -1,6 +1,3 @@
-@description('The Azure region into which the resources should be deployed.')
-param location string = resourceGroup().location
-
 @description('The name of the App Service app.')
 param appServiceAppName string = 'otameshi-${uniqueString(resourceGroup().id)}'
 
@@ -8,6 +5,7 @@ param appServiceAppName string = 'otameshi-${uniqueString(resourceGroup().id)}'
 param appServicePlanSkuName string = 'F1'
 
 var appServicePlanName = 'otameshi-plan'
+var applicationGatewayName = 'otameshi-appgw'
 
 module website './modules/website.bicep' = {
   name: 'otameshi-website'
@@ -15,14 +13,13 @@ module website './modules/website.bicep' = {
     appServiceAppName: appServiceAppName
     appServicePlanName: appServicePlanName
     appServicePlanSkuName: appServicePlanSkuName
-    location: location
   }
 }
 
-module cdn './modules/cdn.bicep' = {
-  name: 'otameshi-cdn'
+module appgw './modules/appgw.bicep' = {
+  name: 'otameshi-appgw'
   params: {
-    httpsOnly: true
-    originHostName: website.outputs.appServiceAppHostName
+    applicationGatewayName: applicationGatewayName
+    appServiceFqdn: website.outputs.appServiceAppHostName
   }
 }
